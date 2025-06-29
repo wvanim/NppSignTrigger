@@ -1,0 +1,173 @@
+(pour accéder : Selectionner + Ctrl-F + [suivant])
+Commande_par_signe, Commande_par_nom, requetes_repetees
+(colonne_incrutees*) cadre_menu , cadre_membres, 
+		  Sélection_item, Memorisation_colinlaid
+
+(pour accéder aux classes : sélect dernier mot + Alt-w) 
+hot_const.py.HotWord
+editor_.py.NotepadSituation
+hot_goto.py.RewindStack
+editor_.py.ColumnsInLaid
+editor_.py.ColumnInLaid
+
+
+TODO
+	mettre à jour : val_.situation après chaque modification d'onglet ou de texte
+				    exemple lors de la suppression de colonne-incrustée
+	' ' ne doit pas effacer le presse-papier
+________________________________________________________________________________________________________________________
+
+										Partie 1 : Présentation
+________________________________________________________________________________________________________________________
+	Chapitre 1 : Présentation générale
+		1.1 - Objectif
+			  Execute une commande-éditeur WvHotWord* 
+			  Vous utiliserez des mots dans les texte de Notepad++ pour déclencher des macros
+			  Au besoin vous écrirez ces mots, dans ce cas, ils disparaitrons automatiquement
+			  après usage
+			  Ces mots seront appelés : commande_hotword*
+			  Note: WvHotWord utilise aussi des signes de ponctuation et d'opération 
+		1.2 - Exemple d'utilisation de WvHotWord
+			- L'utilisateur écrit un nom de commande_hotword dans un texte de Notepad++,
+			- puis sélectionne ce nom
+			- et enfin appuie sur les touches Alt+W pour exécuter la macro
+		1.3 - Exemple le 'rewind*' - replace le curseur à la position de l'appel précédant : 
+			  inscrire x, le sélectionner + Alt-WvHotWord
+		1.4 - Les raccourcis existent,
+			  exemple 1 : la sélection d'un seul espace pour effectuer le rewind*
+			  exemple 2 : si le mot sélectionné est précédé d'un point, 
+			              WvHotword recherchera la déclaration de fonction correspondante
+	Chapitre 2 : Les diffrentes présentation de la commande_hotword
+		2.1 - La commande WvHotWord* peut être composé de 2 élements :
+			2.1.1 - une portion de texte nommée : item.cible*.
+				rôles:
+				- nom_de_commande_wv(*) : mot pour déclencher une fonction_Python*
+				- paramètre : nom à traiter (rechercher, copier, lister ses composants...)
+			2.1.2 - un signe_de_commande_ wv(*) : signe de séparation ou opérateur pour déclencher une fonction_Python* 
+    
+		2.2 - Process d'exécution :
+			2.2.1 - action de l'utilisateur
+				- cibler* une item (portion de texte)
+				- lance la macro WvHotWord*
+			2.2.2 - comment désigner le texte.
+				soit:
+				- le texte est sélectioné dans notepad
+				- l'item est placé dans le presse papier
+				- le curseur est placé sur l'item_cible* précédé d'un caractère de commande
+				- le curseur est placé sur un item d'une liste-intégrée
+				- le curseur est placé sur une mot (ce sera l'item_cible*) 
+				qui sera recherché parmis les fonction Python ou Javascript
+    
+			2.2.3 - Syntaxe d'un item-cible* : 
+				- # ou ?   : affiche l'aide pour les commandes éditeur
+				- 1 espace : rewind* = retour à la position précédante 
+				(pour selection et presse-papier)
+				- plusieurs espaces sélectionnés vide le presse-papier 
+				- mnémonique court - 1 à 3 caractères : msg mnu py js...
+				note : si le mnémonique est suivi du signe moins '-', il est effacé.
+				- signe de commande suivi de nom_de_fonction 
+				- '>' : Recherche-répétée
+						>Python : signe '>' suivi du nom (TODO: classe et fonction js)
+				- '#' : mnémonique long. Exemple #reinit_w
+						pseudo fonction : #nomDeComande(paramètre 1, paramètre 2, ...)
+						(pour item sous curseur texte)
+				- '.' : recherche de nom de fonction_Python*       
+				- dans une colonne-incrustée*. voir : class ColumnsInLaid
+    
+		2.3 - Comment exécuter un commande éditeur
+			soit :
+				- Si elle n'est pas présente, écrivez votre l'item_cible*, où vous le souhaitez dans le texte
+				- placer le curseur sur l'item_cible* - juste devant, ou juste après ou au milieu...  
+			ou bien
+				- sélectionner l'item_cible* dans Notepad++
+			ou bien
+				- sélectionner l'item_cible* éditeur dans le presse-papier
+			puis
+			- Exécutez WvHotWord*, en appuyant sur la combinaison de touche ou par le menu
+________________________________________________________________________________________________________________________
+		
+										Partie 2 : les process 
+________________________________________________________________________________________________________________________
+Chapitre 1 : l'ouverture d'une invocation* (Déclenché par les touches clavier : Alt-w)
+	wv_js_basic.py.main() 
+		project_.py.project_init() 
+			hot_const.init_setting() : si le fichier setting est absent
+		________________________________________________________________________________________________________________________
+		project_.py.play_invocation()
+			file_.get_setting(val_.SET_DOC_BATCH) : Récupère "quels documents" seront traité par lot
+			hot_word.py.hot_word_exec() : 
+				[Ch.3...]!hot_word.py._hot_word_exec 
+					Pointage de l'item_cible*
+					'?' => print('>'+file_.message_("HELP_COMMAND"))
+					'on' / 'off' : Accepte le pointage par simple position du curseur
+					1 seul espace sélectionné : rewind*
+					Plusieurs espaces sélectionnéz : rien
+					1 mot électionné : commande de la table -> hot_word.py>COMMANDS_HOTWORD+
+					'<nothing>.' => goto_.list_members(command) :  Liste des fonctions ou des variables en Python ou en Javascript.  
+
+Chapitre 2 : fermeture de l'invocation
+	WvJsBasic.py.main()
+		project.py.project_close() 
+			[Ch. 8.5] editor.py.close_process()	
+
+Chapitre 3 : Commande_par_signe
+	[Ch. 1...] hot_word.py._hot_word_exec 				# Exécution de l'item_cible*
+		hot_word.py.hotword_action() 
+			hot_word.py.car_exec()
+				[ Ch. 7-8.2...] hot_commands.py._car_exec()
+
+Chapitre 4 : Commande_par_nom
+	[Ch. 1...] hot_word.py._hot_word_exec 				# Exécution de l'item_cible*
+		hot_word.py.hotword_action() 
+			hot_commands.py.hotname_exec()
+				[Ch. 8.1] hot_commands.py.COMMANDS_HOTWORD[item]
+Chapitre 5 : rewind
+	hot_goto.py.pos_rewind_previous()
+		hot_goto.py.pos_previous() [class RewindStack]
+			hot_goto.py._pos_goto() [class RewindStack]
+Chapitre 6 : requetes_repetees* (Outils)
+    script_iter = file_.get_scripts_of_project()
+	for f in script_iter[1]:
+		""" Traitement de chaque fichier 'f' ***
+	
+Chapitre 7 : Accès_au_lexique : nom* - nom (item_cible) suivi d'asterisque			
+	[Ch. 3...] hot_word.py._car_exec(command) 			# Commande par signe
+		CAR_COMMAND={'*':[goto_.goto_glossary,False]
+			hot_goto.py.goto_glossary()
+				hot_goto.py._goto_glossary()
+					editor_.py.select_word_in_file()
+					editor_.py.select_word_in_user_files()
+
+Chapitre 8 : Dessiner, utiliser et supprimer une colonne_incrustee*
+	8.1 - Affichage du cadre_menu : command_word* 'mnu'		
+		[Ch. 4... Commande_par_nom] hot_commands.py.hotname_exec(command) 		# Commande par signe
+			COMMANDS_HOTWORD{'mnu':[hot_commands.py.list_menu,False]}
+				[Ch. 8.3]hot_commands.py.colinlaid_display( tab, selection_rule )
+	8.2 - cadre_membres d'une collection
+		[Ch. 3... commande par sign] hot_word.py._car_exec(command)# Commande par signe
+			CAR_COMMAND={'.':[hot_commands.py.dot_command,False]}
+				hot_goto.py.list_members()
+					editor_.py.list_func_py(command)
+						string_.py.get_functions_by_def(text)
+					[Ch 8.3...] hot_commands.py.colinlaid_display( tab, selection_rule 
+
+	8.3 - Dessiner la colonne-incrustée 
+		[... Ch. 8.1 - 8.2 : Préparation spécifique] hot_commands.py.colinlaid_display( tab, selection_rule )
+			editor_.py.colinlaid_add( list_string )
+				editor_.py.draw_column_inlaid()	 			# classe ColumnInLaid
+					string_.py.list_inlaid_add() 			# Ajoute le cadre d'une liste-incrustée dans un texte 
+						string_.py.draw_frame()  			# Dessine le cadre de la liste, place chaque ligne dans une case d'un tableau
+						string_.py._list_insert_at_start_line() # Insère chaque case du talbleau 'items' au début de chaque ligne à partir de `line_start`.
+				self.wait_stock.append(colinlaid)
+
+	8.4 - Sélection_item la colonne-incrustée 
+		[Ch. 1... ouverture invocation] hot_word.py._hot_word_exec 				# Exécution de l'item_cible*
+			hot_word.py.in_list_exec 
+				editor_.py._print_debug()
+				
+	8.5 - Memorisation_colinlaid pour la requète wvhotword suivante et Effacement de colonne-incrustée
+		[... ch. 2 : s'effectue en fin d'invocation]
+		editor.py.close_process()
+			editor.py.flush_cols_inlaid() (class ColumnsInLaid)
+				editor_.py.to_string_colsinlaid() (class ColumnsInLaid)
+					editor_.py.to_string_column() (class ColumnsInLaid)

@@ -1,0 +1,33 @@
+"""
+HotWord Parser Module
+---------------------
+
+Ce module fournit la classe `HotWord`, chargée d’analyser le contexte de l’éditeur Notepad++ afin d’en extraire une expression dite *hotword*.
+
+Un *hotword* est une formule clé composée des éléments suivants :
+
+- **Item principal** : le mot ciblé par l'utilisateur (curseur ou sélection).
+- **Caractères spéciaux** : placés avant et/ou après l’item.
+- **Commande d’édition** (facultative) : située à la fin, elle agit sur le document (ex. suppression de la formule).
+
+Exemple d’expression : `.name*+`
+
+Composants :
+    .    → Signe préfixe, devient `key_command` si aucun suffixe n’est présent.  
+    name → Item ciblé, mot ou caractère unique (`' '`, `'?'`, etc.).  
+    *    → Signe suffixe, déclenche l’exécution d’une fonction Python (`key_command`).  
+    +    → Commande d’édition, agit dans Notepad++ (ex. `-` = effacer la formule après exécution).
+
+Remarque :
+    Tous les signes sont optionnels.
+
+Priorité d’analyse (ordre d’exécution) :
+    1. Sélection vide ou contenant uniquement des espaces.
+    2. Commande spéciale détectée dans le presse-papier.
+    3. Détection d’une colonne incrustée (`colinlaid`).
+    4. Sélection textuelle dans l’éditeur.
+    5. Analyse autour du curseur (détection d’item et de signes environnants).
+
+Résultats :
+    Le parser renvoie une commande principale (`key_command`), un item (s’il existe), une éventuelle commande d’édition (`key_command_edit`), et la portion de texte appelée *formule*.
+"""

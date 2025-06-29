@@ -1,0 +1,98 @@
+Colonnes incrutées
+
+A - Rôle :
+- Afficher un colonne de choix dans un cadre incrusté dans le texte de Notepd.
+- action sur la sélection
+
+B - les composants :
+Dans hot_colinlaid.py :
+- class ColumnsInLaid : outil des gestion de la durée de vie de colonne-inlaid
+- class ColumnInlaidUI : affichage, selection et effacement d'un colonne-inlaid 
+
+C - Comportement de colonne_incrustée
+1 - affichage lors d'un appel Hotword.
+2 - la sélection est active tant que la colonne est affichée
+3 - la colonne s'effacera
+  - à la fin de l'appel du horword suivant
+  - lors de la sélection d'un item
+  - en l'effaçant avec la touche suppr dans Notepad++
+ 
+D - process
+1 - Ajout de la colonne_incrustée
+  a - column_inlaid.py.add_column
+	  paramètres :
+	  	- titre de la colonne
+	  	- tab : lite des items et des fonctions
+	  	- fonction générique de la colonne - réservée aux item ne comportant pas de fonction associées
+	  	- situation  de de l'affichage dans Notepad 
+	  - collecte l'expression_hotword dans la ligne sélectionnée de la colonne
+      - efface a colonne
+	  - ajoute la colonne dans le texte Notepad++, 
+	  - mémmorise les données de la colonne
+	    Note: l'ecriture dans le fichier s'effectue en fin d'invocation de Hotword
+
+  a.1 - dessin de la colonne_incrustée
+  
+  b - mémorisation dans un fichierr
+      en fin d'invocation Hotword
+	  column_inlaid.py.flush_cols_inlaid()
+2 - sélection d'un item
+  a - le curseur texte est sur un item de la colonne
+  b - Alt-w
+  c - le parser transmet le traitement à  
+	  column_inlaid.parse()
+	  TODO
+	  
+	  
+E - Exemple de script colonne_incrustée
+1 - pour menu - voir : .hot_word_fr.txt/menu
+	- Script :
+		>
+		#wv# 
+		Aide	#wv#?
+		rewind	#wv#x
+	- rôle de chaque ligne :
+		>	 : commande par défaut (pour les items ne comportant pas de commande)
+		#wv# : déclaration du séparateur
+		Aide	#wv# ? : libellé - séparateur(optionnel) - signe-de-commande(optionnel)
+		...
+______________________________________________________________________
+
+  LES 2 COLONNES
+______________________________________________________________________		
+"""
+Gestionnaire principal de colonnes-incrustées (cadres contextuels) dans l'éditeur.
+
+Fonctionnement général :
+-------------------------
+Le système repose sur le concept de "liste contextuelle volante" :
+- Une seule colonne-incrustée est visible dans le texte à un instant donné.
+- Cette colonne sert à proposer des choix visuels (items encadrés), chacun associé à une commande.
+
+Deux colonnes sont manipulées au cours d'une invocation :
+---------------------------------------------------------
+
+1. `self.data` (instance de `HotColumnListSource`) :
+   - Colonne préexistante, chargée depuis le fichier mémoire `COLUMN_INLAID_FILE`.
+   - Elle est détectée et supprimée automatiquement si encore présente à l'ouverture.
+   - Sert à parser une sélection d’item lors d’une invocation sans nouvel affichage.
+
+2. `self.new_colinlaid` (instance de `HotColumnListSource`) :
+   - Nouvelle colonne créée lors d’un appel à `add_column(...)`.
+   - Elle est dessinée dans le texte à la position actuelle du curseur.
+   - Elle remplace l’éventuelle colonne précédente (`flush()` appelé juste avant).
+
+Cycle typique :
+---------------
+- Lors de l’ouverture du module, une ancienne colonne peut être détectée et supprimée.
+- Lorsqu'une nouvelle colonne est demandée, elle est insérée dans le texte.
+- Avant cette insertion, toute colonne précédente est effacée pour garantir unicité.
+- La nouvelle colonne est mémorisée pour permettre sa suppression lors d’un appel futur.
+
+Rôle de la classe :
+-------------------
+- `flush()` : supprime la colonne actuellement visible (si présente)
+- `add_column()` : crée et insère une nouvelle colonne dans le texte
+- `parser()` : traite la sélection d’un item dans une colonne visible
+"""
+

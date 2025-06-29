@@ -1,0 +1,5 @@
+2
+2
+1675
+0
+c:\Users\33684\AppData\Roaming\Notepad++\plugins\Config\PythonScript\Scripts\wvsystem_modules\datas\menu.txt

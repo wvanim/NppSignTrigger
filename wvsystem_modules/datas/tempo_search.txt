@@ -1,0 +1,11 @@
+# Memorise les information de recherche-repetee. ex : >text_à-rechercher
+11
+def init_search_by_step
+2300
+55
+0
+C:\Users\33684\AppData\Roaming\Notepad++\plugins\config\PythonScript\scripts\wvsystem_modules\hot_commands.py
+18600
+C:\Users\33684\AppData\Roaming\Notepad++\plugins\config\PythonScript\scripts\wvsystem_modules\hot_goto.py
+6078
+C:\Users\33684\AppData\Roaming\Notepad++\plugins\config\PythonScript\scripts\wvsystem_modules\datas\functions.py

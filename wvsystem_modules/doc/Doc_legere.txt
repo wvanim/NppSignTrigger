@@ -1,0 +1,112 @@
+# 📘 WvHotWord – Light Project Documentation (Markdown)
+
+## 🧠 Project Overview
+**WvHotWord** is a Notepad++ automation framework using PythonScript. It allows users to execute editor actions by writing or selecting special keywords (called *hotwords*) inside the text. These hotwords can trigger Python functions, navigate through the code, manage contextual UI like inlaid columns, or perform repeated queries.
+
+---
+
+## 🗂️ Core Modules
+
+### `WvJsBasic.py`
+- Main entry point when triggering a WvHotWord (`Alt+W`)
+- Calls project and execution flow via `project_.py`
+
+### `project_.py`
+- Handles project initialization and teardown
+- Starts `play_invocation()` → loads settings, triggers hotword parsing
+- Ends with `project_close()` which may clean temporary state or columns
+
+### `hot_word.py`
+- Core engine for identifying and executing hotwords
+- Supports execution by name, symbol, or from selection
+- Routes to appropriate action (`car_exec`, `hotword_action`, `in_list_exec`)
+
+### `hot_commands.py`
+- Contains dictionaries and logic to map hotwords to actual Python functions
+- Implements command handlers like `COMMAND_PYTHON`, `colinlaid_display`, etc.
+
+### `goto_notepad.py`
+- Manages navigation: rewind stack, glossary lookup, member listings
+- Class `RewindStack` stores cursor history and supports `rewind`
+
+### `editor_.py`
+- Editor manipulation: inserting inlaid columns, retrieving selected line, flushing visual UI
+- Classes: `ColumnInLaid`, `ColumnsInLaid`, `NotepadSituation`
+
+### `string_.py`
+- String utilities: parse Python definitions, draw column borders, build inlaid list content
+
+### `file_.py`
+- File and config helpers: loading batch file list, checking presence, loading settings
+
+### `system_.py`
+- Shared system state like `sys_.situation`
+- Debug mode toggling and common constants
+
+---
+
+## 🔤 Hotword Types
+
+| Syntax        | Effect                          |
+|---------------|----------------------------------|
+| `rewind*`     | Return to previous cursor position |
+| `>name`       | Repeated search for name         |
+| `#name()`     | Execute pseudo-command           |
+| `.function`   | Jump to Python function          |
+| `' '` (space) | Rewind quick (if selected)       |
+| `msg`, `mnu`  | Trigger a built-in menu command  |
+
+---
+
+## 🧱 Colinlaid System
+
+- Dynamically injects a column UI into the editor (inlaid visual block)
+- Created via `colinlaid_add()`, drawn by `draw_column_inlaid()`
+- Selection is read via cursor or clicked line
+- Auto-cleared:
+  - On Alt+W (next hotword)
+  - On selection
+  - Or with Ctrl-Z (undo)
+
+---
+
+## 🧠 Smart Flow
+
+1. User selects or types a hotword
+2. Presses Alt+W → triggers `WvJsBasic.py.main()`
+3. Routes into `project_.py.play_invocation()` → calls `hot_word._hot_word_exec()`
+4. Depending on hotword syntax:
+   - Symbol-based: `car_exec()` → `hot_commands._car_exec()`
+   - Name-based: `hotname_exec()`
+   - From column: `in_list_exec()`
+5. Executes function or UI effect
+6. Ends with `project_close()` and possible `flush_cols_inlaid()`
+
+---
+
+## 🧪 Notes
+- Strings are handled in UTF-8 and **must be converted to `unicode`** before parsing/stripping.
+- Colinlaid and hotword commands are carefully designed to be undo-friendly.
+- Navigation is assisted by the `RewindStack`, glossary search, and inline function listing.
+
+---
+
+## 🔧 TODO Highlights
+- Update `sys_.situation` after any edit/tab switch
+- Avoid clearing clipboard when a single space is selected
+- Integrate more JS command support for `>Javascript`
+
+---
+
+## ✅ Keyboard Shortcuts
+
+| Shortcut | Action                        |
+|----------|-------------------------------|
+| `Alt+W`  | Trigger hotword processing    |
+| `Ctrl-Z` | Undo (including colinlaid)    |
+| `Ctrl-Y` | Redo colinlaid if needed      |
+
+---
+
+> ✨ This documentation reflects the current structure of the WvHotWord project, based on its uploaded source files.
+

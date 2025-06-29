@@ -1,0 +1,15 @@
+var tab0=[];
+var deg=Math.floor(Math.random()*360+0);*
+var nbColors = 5;
+for (var i = 0; i < 3*nbColors; i++ ) {
+	tab0[i]=Math.floor(Math.random()*255+0);     
+}
+var colors = [];
+var colorI = 0;
+var colorTxt = "";
+for(int i; i<nbColors; i++){
+	colorTxt += ",rgba("+tab0[colorI++]+","+tab0[colorI++]+","+tab0[colorI++]+",1)";
+	
+}
+
+this.w_rect.style.backgroundImage="linear-gradient("+deg+"deg,"+colorTxt")";

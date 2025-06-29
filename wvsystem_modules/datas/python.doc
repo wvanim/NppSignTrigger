@@ -1,0 +1,160 @@
+
+Info cadre
+pos = editor.getCurrentPos()
+editor.callTipShow(pos, "🔔 Ceci est un calltip (pas une annotation)")
+
+DOC : def example(arg1, arg2):
+    """
+    Résumé ici.
+
+    Args:
+        arg1 (int): Description.
+        arg2 (str): Description.
+
+    Returns:
+        bool: Description.
+    """
+
+def example(arg1, arg2):
+    """
+    Résumé ici.
+
+    Args:
+        arg1 (int): Description.
+        arg2 (str): Description.
+
+    Returns:
+        bool: Description.
+    """
+int	Un entier
+float	Un flottant
+bool	Un booléen
+str	Une chaîne de caractères
+unicode	Une chaîne unicode (important en Python 2 !)
+list	Une liste (de n’importe quoi)
+list[str]	Une liste de chaînes
+tuple	Un tuple générique
+tuple[int, str]	Un tuple de type (int, str)
+dict	Un dictionnaire
+dict[str, int]	Dictionnaire clé str, valeur int
+object	Un objet Python générique
+None	Signifie "retourne rien"
+callable	Une fonction ou méthode qu’on peut appeler
+Iterable, Iterator	Objet qu’on peut itérer (utile pour les for)
+file	Objet fichier (en Python 2 : ouvert avec open())
+type	Une classe elle-même
+Exception	Pour les blocs Raises:
+Any	N’importe quel type (informel, ou via typing)
+
+________________________________________________________________________________________________________________________
+________________________________________________________________________________________________________________________
+1. Utiliser getattr() pour appeler une fonction d’un module
+Si la fonction est définie dans un module, vous pouvez la récupérer avec getattr() :
+________________________________________________________________________________________________________________________
+import math
+
+func_name = "sqrt"  # Nom de la fonction en string
+result = getattr(math, func_name)(9)  # Équivaut à math.sqrt(9)
+
+print result  # Affiche: 3.0
+
+_______________________________________________________________________________________________________________________
+________________________________________________________________________________________________________________________
+2. Utiliser globals() ou locals() pour appeler une fonction définie dans le même script
+Si la fonction est définie dans le script courant, vous pouvez utiliser globals() ou locals() :
+________________________________________________________________________________________________________________________
+def ma_fonction(param):
+    return "Vous avez dit : " + param
+
+nom_fonction = "ma_fonction"
+print globals()[nom_fonction]("Hello")  # Affiche: Vous avez dit : Hello
+
+________________________________________________________________________________________________________________________
+________________________________________________________________________________________________________________________
+3. Dans une classe : utiliser getattr() sur self
+Si la fonction est une méthode d’une classe, utilisez getattr(self, "nom_fonction") :
+________________________________________________________________________________________________________________________
+class Test:
+    def ma_methode(self, x):
+        return "Valeur reçue : " + str(x)
+
+    def appeler_methode(self, nom, param):
+        return getattr(self, nom)(param)  # Équivaut à self.ma_methode(param)
+
+obj = Test()
+print obj.appeler_methode("ma_methode", 42)  # Affiche: Valeur reçue : 42
+
+________________________________________________________________________________________________________________________
+________________________________________________________________________________________________________________________
+4. Importer un module via __import__() et appeler une fonction
+Si le nom du module est dans une chaîne de caractères, utilisez __import__() pour l'importer dynamiquement :________________________________________________________________________________________________________________________
+________________________________________________________________________________________________________________________
+module_name = "math"  # Nom du module en string
+module = __import__(module_name)  # Importation dynamique
+
+func_name = "sqrt"  # Nom de la fonction
+result = getattr(module, func_name)(9)  # Équivaut à math.sqrt(9)
+
+print result  # Affiche: 3.0
+
+
+________________________________________________________________________________________________________________________
+________________________________________________________________________________________________________________________
+5. Stocker le module et ses fonctions dans un dictionnaire
+Si vous avez plusieurs modules et fonctions à appeler dynamiquement :
+________________________________________________________________________________________________________________________
+modules = {
+    "math": __import__("math"),
+    "random": __import__("random")
+}
+
+# Appel dynamique
+print modules["math"].sqrt(16)  # math.sqrt(16) → 4.0
+print modules["random"].randint(1, 10)  # random.randint(1, 10)
+
+
+________________________________________________________________________________________________________________________
+________________________________________________________________________________________________________________________
+6. Utiliser une chaîne pour importer un module et appeler une fonction
+Si le nom du module et de la fonction sont tous deux en chaîne :
+________________________________________________________________________________________________________________________
+module_name = "math"
+func_name = "pow"
+
+module = __import__(module_name)  # Import dynamique
+function = getattr(module, func_name)  # Récupération de la fonction
+result = function(2, 3)  # Équivaut à math.pow(2, 3)
+
+print result  # Affiche: 8.0
+✅ Explication :
+
+__import__("math") importe math.
+getattr(math, "pow") récupère la fonction pow.
+function(2, 3) exécute pow(2, 3).
+
+________________________________________________________________________________________________________________________
+________________________________________________________________________________________________________________________
+7. Importer un module spécifique depuis un package
+Si vous devez importer un module spécifique depuis un package :
+
+________________________________________________________________________________________________________________________
+module_name = "os.path"
+module = __import__(module_name, fromlist=[""])  # Importe os.path
+
+print module.basename("/home/user/file.txt")  # Affiche: file.txt
+✅ fromlist=[""] permet de récupérer directement os.path au lieu de os.
+
+________________________________________________________________________________________________________________________
+________________________________________________________________________________________________________________________
+8. Exemple combiné : Import dynamique et exécution
+Si vous voulez exécuter une fonction d’un module dont le nom est en string :
+________________________________________________________________________________________________________________________
+def execute_function(module_name, function_name, *args):
+    module = __import__(module_name)  # Importer le module
+    function = getattr(module, function_name)  # Récupérer la fonction
+    return function(*args)  # Exécuter la fonction avec ses arguments
+
+# Exemples
+print execute_function("math", "sqrt", 25)  # 5.0
+print execute_function("math", "pow", 2, 4)  # 16.0
+✅ Avantage : Fonction générique qui appelle n'importe quelle fonction d'un module en string.
