@@ -1,57 +1,60 @@
-# WV-HOT-WORD pour Notepad++ 
-**Un couteau-suisse de navigation par symboles**  
-*(.classes, #définitions, >recherche, etc.)*
+# WV-HOT-WORD for Notepad++
+**A Swiss Army Knife for Symbol-Based Navigation**  
+*(.classes, #definitions, >search, etc.)*
 
 ---
 
-## ❓ Aide recherchée  
-- [ ] Documenter le code (je suis dyslexique).  
-- [ ] Compléter avec de nouvelles idées.  
-- [ ] Tester sur différents systèmes.  
+## ❓ Help Wanted  
+- [ ] Document the code (I'm dyslexic).  
+- [ ] Add new ideas and suggestions.  
+- [ ] Test on different systems.
 
-> **Contact** : [Votre email/Discord ici].  
----
-
-## 🚀 Fonctionnalités Clés
-- **Recherche intelligente** :
-  - `.maClasse` → Cherche les déclarations de classe
-  - `#define` → Trouve les définitions
-  - `>mot` → Recherche itérative
-- **Navigation** :
-  - ` ` (espace) → Retour à la position précédente
-  - `*terme` → Cherche dans le glossaire
-- **Gestion de projet** :
-  - Historique des positions (`Alt+W` pour naviguer)
-  - Support multi-fichiers
+> **Contact**: [Your email/Discord here]
 
 ---
 
-## 📦 Structure des Fichiers
-| Fichier               | Rôle                                                                 |
-|-----------------------|----------------------------------------------------------------------|
-| `WvJsBasic.py`        | Point d'entrée principal                                            |
-| `editor_.py`          | Interface avec Notepad++ (curseur, sélections, etc.)                |
-| `hot_commands.py`     | Dictionnaire des commandes (`#help`, `>search`, etc.)               |
-| `hot_goto.py`         | Gestion des sauts de position et recherches                         |
-| `hot_parser.py`       | Analyse les symboles (`.`, `#`, `>`)                                |
-| `project_.py`         | Initialisation du projet et gestion des dépendances                 |
+## 🚀 Key Features
+- **Smart Search**:
+  - `.myClass` → Finds class declarations  
+  - `#define` → Finds definitions  
+  - `>word` → Iterative search
+- **Navigation**:
+  - ` ` (space) → Go back to previous position  
+  - `*term` → Search in glossary
+- **Project Management**:
+  - Position history (`Alt+W` to navigate)  
+  - Multi-file support
+
+---
+
+## 📦 File Structure
+
+| File               | Purpose                                                              |
+|--------------------|----------------------------------------------------------------------|
+| `WvJsBasic.py`     | Main entry point                                                     |
+| `editor_.py`       | Interface with Notepad++ (cursor, selections, etc.)                  |
+| `hot_commands.py`  | Command dictionary (`#help`, `>search`, etc.)                        |
+| `hot_goto.py`      | Handles jumps and position-based searches                            |
+| `hot_parser.py`    | Parses symbol-based triggers (`.`, `#`, `>`)                         |
+| `project_.py`      | Project initialization and dependency management                     |
 
 ---
 
 ## 🛠 Installation
-1. Copiez tous les fichiers dans `plugins/PythonScript/scripts/` de Notepad++
-2. Lancez `WvJsBasic.py` via le menu *PythonScript* > *Run...*
-3. Dans un fichier dans Notepad++, ajoutez les signes ou les opérateurs autour des mots + Alt-W
+1. Copy all files into `plugins/PythonScript/scripts/` in your Notepad++ folder  
+2. Launch `WvJsBasic.py` via *PythonScript* > *Run...*  
+3. In an open file in Notepad++, add symbols around words and press Alt-W
 
 ---
 
-## 🎯 Exemples d'Usage
+## 🎯 Usage Examples
 ```python
-# Trouver une classe
-.maClasse  # → Saute à la déclaration "class maClasse"
+# Find a class
+.myClass  # → Jumps to the "class myClass" declaration
 
-# Chercher une définition
-#setup  # → Trouve "def setup()"
+# Find a definition
+#setup     # → Finds "def setup()"
 
-# Naviguer
-monMot >  # → Cherche "monMot" dans tous les fichiers ouverts
+# Navigate
+myWord >   # → Searches for "myWord" across all open files
+```
