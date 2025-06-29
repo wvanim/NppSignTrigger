@@ -35,32 +35,21 @@ reload(file_)
 import string_ as str__
 reload(str__)
 
-# TODO _pos_goto ajouter la 'view'
+# TODO _pos_goto add 'view'
 #________________________________________________________________________________________________________________________
 #
 #                   E X E C U T E   U N E   E T A P E   D E   W V - H O T - W O R D
 #________________________________________________________________________________________________________________________
+"""
+Invocation triggered by Alt-W, taking into account the cursor position
+on a space or a word that is preceded or followed by a special character recognized by this macro.
+"""
 def main():
     if project_.project_init(): return
 
-    #try:
     project_.play_invocation()
-        #f str__.ON_DEBUG: #rint("WvJsBasic : action formulewv = {}").format(ret)
-    #except Exception, e:
-    #    # Code de gestion de l'erreur
-    #    print "Une erreur s'est produite :", e  
-    #finally:
-    """ """
+    
     project_.project_close()
 #______________________________________________________________________
-# TEST
-# f = notepad.getCurrentFilename()
-# file = path, id-buffer, num_onglet[0-n], view[0-1]
-# files = notepad.getFiles()  
-# for f in files: print(str(f[3])+" "+f[0])
-
-#edit_.notepad_open(val_.SYSTEM_MODULES_PATH+"")
-
-#notepad.runMenuCommand('Recherche', "Rechercher...") #'Clone to Other View')
 
 main()
