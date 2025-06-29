@@ -41,6 +41,7 @@
 ## 🛠 Installation
 1. Copiez tous les fichiers dans `plugins/PythonScript/scripts/` de Notepad++
 2. Lancez `WvJsBasic.py` via le menu *PythonScript* > *Run...*
+3. Dans un fichier dans Notepad++, ajoutez les signes ou les opérateurs autour des mots + Alt-W
 
 ---
 
